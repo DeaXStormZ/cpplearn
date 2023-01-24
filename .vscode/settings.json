@@ -44,5 +44,10 @@
         "stdexcept": "cpp",
         "streambuf": "cpp",
         "typeinfo": "cpp"
-    }
+    },
+    "cSpell.words": [
+        "lvalues",
+        "rvalue",
+        "rvalues"
+    ]
 }

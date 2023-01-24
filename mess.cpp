@@ -1,12 +1,11 @@
 #include <iostream>
 #include <vector>
+#include <memory>
 
-struct C { int m; };
- 
 int main()
 {
-    int a = 42;
-    auto l = [&a]() { std::cout << a; };
-    a = 7;
-    l();
+    auto name1 = std::make_unique<std::string>("foo");
+    auto name2 = std::move(name1);
+    std::cout << *name2;  
+    std::cout << *name1;  
 }

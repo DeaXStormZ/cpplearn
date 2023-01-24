@@ -37,13 +37,13 @@ bool has_overlaps(const std::vector<Meeting> &meetings2)
 
 int main()
 {
-    std::vector<Meeting> meetingsOverlapping = {
+    std::vector<Meeting> meetingsOverlapping {
         {.start = 0, .end = 60},
         {.start = 60, .end = 90},
         {.start = 30, .end = 60},
     };
-    std::vector<Meeting> meetingsNotOverlapping = {
-        {.start = 0, .end = 60},
+    std::vector<Meeting> meetingsNotOverlapping {
+        {.start {0}, .end = 60},
         {.start = 60, .end = 90},
     };
     // std::vector<Meeting> m = &meetings;
