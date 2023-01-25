@@ -1,5 +1,3 @@
-# Learn cpp
-
 # Fundamentals
 
 ## Data types
@@ -29,11 +27,11 @@ A data type is a classification identifying the possible values for that type, a
   - ⚠️ scoping. watch dangling reference
   - to allow the captured values to be changed, the lambda has to be mutable
 
-### [Values](https://en.cppreference.com/w/cpp/language/value_category)
+## [Values](https://en.cppreference.com/w/cpp/language/value_category)
 
 cf. [Video](https://www.youtube.com/watch?v=wkWtRDrjEH4&ab_channel=CopperSpice)
 
-## Value Categories :
+### Value Categories :
 Explanatory article : cf. [here](https://www.internalpointers.com/post/understanding-meaning-lvalues-and-rvalues-c)  
 First of all, let's keep our heads away from any formal definition. In C++ an lvalue is something that points to a specific memory location. On the other hand, a rvalue is something that doesn't point anywhere. In general, rvalues are temporary and short lived, while lvalues live a longer life since they exist as variables. It's also fun to think of lvalues as containers and rvalues as things contained in the containers. Without a container, they would expire.
 
@@ -80,6 +78,11 @@ constexpr : constant known at compile time
 - pointer to const : `const char *var`
 - const methods : `void someMethod() const` : someMethod will no change `this`
 
+
+### Operators
+
+![](img/operators.png)
+
 ## Move semantics, perfect forwarding
 
 cf. [Vidéo](https://www.youtube.com/watch?v=kRVjG3qb7RE&ab_channel=CopperSpice)
@@ -106,103 +109,7 @@ cf. [Vidéo](https://www.youtube.com/watch?v=kRVjG3qb7RE&ab_channel=CopperSpice)
 
 Pb w/ raw pointers : complicated to track who owns the object, so to know when to deallocate it safely
 
-### Smart Pointers (C++11)
-
-Smart pointers
-- a data type which simulate a ptr
-- provide some form of automatic mem management
-- prevent most mem leaks, by making deallocation automatic
-- eliminates dangling pointers by waiting to destroy an object until it is no longer in use
-
-3 types, all are containers for a raw ptr :
-  - unique_ptr
-    - `unique_ptr<int> num_ptr = make_unique<int>(42);`
-    - the destructor will delete the obj when the pointer goes out of scope
-    - cannot copy
-    - std::move() to transfer ownership to another unique_ptr :
-    ```cpp
-    auto name1 = make_unique<string>("foo");
-    auto name2 = std::move(name1) // *name2 = "foo", *name1 = UB
-    name2.release(); // returns the pointer, terminate ownership
-    name2.reset(new std::string("bar")) // terminate the object, replace the ownership
-    ```
-  - shared_ptr
-    - container of raw ptr
-    - reference count of ownership
-    - obj referenced destroyed only when all copies of shared_ptr have been destroyed
-    - ⚠️ not really performant nor useful, avoid to use it 
-  - weak_ptr
-    - created from existing shared_ptr
-    - creation/destruction has no effect on shared_ptr count
-    - after all copies of shared_prt have been destroyed, all weak_ptr copies become null ptr
-    - cannot be dereferenced
-    - can be turned back to shared_ptr (test if ptr is null b4 using it)
-  - auto_ptr : ⚠️ never use this. use unique_ptr instead
-
-### RAII
-
-ownership : memory/value
-owner can 
-- update the data
-- invalidate or move the data
-- free the memory
-
-TODO https://youtu.be/07rJOzFRs6M?list=PLHTh1InhhwT4TJaHBVWzvBOYhp27UO7mI&t=620
-
-
-### Templates
-
-- utilized at compile time to generate a class, function, method or variable based on one or more data types
-- designed w/o knowing the precise data type
-- most of the cost is paid at compile time
-- very powerful tool for generic programming
-- templates are used when multiple variations of the same construct are needed for a variety of different data types
-- template instanciated at compile time
-- none of the info used to instantiate a template can be provided at runtime
-Examples
-- Template class w/ specialized method
-```cpp
-template <class T> // "class" or "typename"
-class Widget {
-  public:
-    void setName(){};
-}
-
-template <> // required, templated class
-void Widget<int>::setName(){} // specialization of a member
-
-// call to Widget.setName with an int will call specialization. call w/ other type will call base method 
-```
-- Template class w/ templated method
-```cpp
-template <class T>
-class Widget {
-  public:
-    template<class M>
-    void setName(M data){};
-}
-
-template <class T>
-template <class M>
-void Widget<T>::setName(M data)
-```
-- Template class w/ class partial specialization. works for class, not templated functions or methods as they must be fully specialized
-```cpp
-template <class T>
-class Widget {
-}
-
-template <class X>
-class Widget<std::vector<X>> {
-}
-
-Widget<int> foo1; // T is int
-Widget<std::vector<int>> v1; // X is int
-```
-- forwarding
-
-
-## forwarding
+### Forwarding
 
 ```cpp
 Widget w;
@@ -218,55 +125,6 @@ reference collapsing => compiler may interpret && T or auto && as single &, so y
 refers to a template func or method which passers args to another func or method preserving the const qualifier and value category
 Dependent of compiler to deduce correct value category
 
-Variadic template : can take a variable nb of args
-`template<typename ... Ts> class Widget;`
-ellipsis
-- left of name of a param : declares a param pack, binding 0 or more args to the variadic template parameter
-- right of an argument : unpack the param pack into separate args `template<typename ... Ts> void makeWidget(Ts ... Vs) { someFunc(Vs...); }`
-Example (cf. [link](https://learn.microsoft.com/fr-fr/cpp/cpp/ellipses-and-variadic-templates?view=msvc-170))
-```cpp
-#include <iostream>
-
-using namespace std;
-
-void print() {
-    cout << endl;
-}
-
-template <typename T> void print(const T& t) {
-    cout << t << endl;
-}
-
-template <typename First, typename... Rest> void print(const First& first, const Rest&... rest) {
-    cout << first << ", ";
-    print(rest...); // recursive call using pack expansion syntax
-}
-
-int main()
-{
-    print(); // calls first overload, outputting only a newline
-    print(1); // calls second overload
-
-    // these call the third overload, the variadic template,
-    // which uses recursion as needed.
-    print(10, 20);
-    print(100, 200, 300);
-    print("first", 2, "third", 3.14159);
-}
-```
-## RAII and smart pointers
-
-## Scope
-
-TODO
-
-## auto
-
-TODO
-
-## Operators
-
-![](img/operators.png)
 
 ## [Undefined behaviour](https://en.cppreference.com/w/cpp/language/ub)
 
@@ -376,13 +234,3 @@ use static_cast instead : `int n = static_cast<int>(3.14);`
       - ⚠️ should avoid to use it
 
 ![](img/cast.png)
-
-
-## Misc
-TODO put this in the right places
-  - avoid use of auto
-  - new => crée un raw ptr
-  - jamais passer en arg des ptrs, utiliser via reference ou const ref; par contre en renvoyer c'est possible
-  - mettre des const de partout
-  - creer des obj sur la stack si possible. new crée sur la heap, donc éviter au max
-TODO RAII. stack >> heap. faire des vecteurs d'objet, + rapide car prefetching. jamais de tri sur un vecteur d'obj. vecteur de ref de pointers dans ce cas, les ref de ptrs sont move. demander à Jordi notation constructeur pour limiter nb move et copy 
