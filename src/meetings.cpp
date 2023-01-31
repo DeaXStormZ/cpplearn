@@ -44,8 +44,9 @@ std::vector<std::reference_wrapper<const Meeting<T>>> get_ref_vector(const std::
 template <typename T>
 bool has_overlaps(const std::vector<Meeting<T>> &meetings)
 {
-    std::vector<std::reference_wrapper<const Meeting<T>>> mv = get_ref_vector<T>(meetings);
-    std::sort(mv.begin(), mv.end(), comp<T>);
+    // pas besoin de faire un vecteur de référence pour des types triviaux (faut benchmark). reference plus lourde qu'un int.
+    auto mv = make_reference_vector(meetings);
+    std::sort(mv.begin(), mv.end());
     T end{};
     for (const Meeting<T> &m : mv) // Mettre des const ref tout le temps !
     { // todo utiliser clang tidy
