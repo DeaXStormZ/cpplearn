@@ -29,6 +29,7 @@ class PriAccount: private Account {
 struct vs class : 
 - struct all is public by default, class all is private by default
 - deriving a class is private by default, using a struct derives public
+- prefer struct for data structure, class when you need encapsulation and internal data processing
 
 Polymorphism : involves pointer indirection
 The separation of interface and impl is crucial

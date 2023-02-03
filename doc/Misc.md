@@ -1,46 +1,59 @@
 # TODO
 
+## [Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines)
+
+- C. 47 : Define and initialize member variables in the order of member declaration
+- L. 23 : Keep the number of function arguments low
+- ES. 50 : don't cast away const
+- L. 11 : never transfer ownership by a raw pointer (use smart ptr/ return gsl.owner<T>)
+- F. 21 : To return multiple out values, prefer tuple or struct (std::optional for 0 or 1 return value)
+- Enum. 3 : Prefer class enum over plain enum
+- L. 12 Declare a pointer that must not be null as not_null (`#include "gsl/gsl" gsl::not_null<Service*> ps = &s`)
+- ES. Avoid lossy arithmetic conversion (use narrow_cast or narrow instead of static_cast to be explicit)
+
 ## Scope
+
+## copy elision
 
 ## auto
 
+## enum
+ 
+manière 98 :
+`enum value_place_request { FIRST, ANY, LAST, SECOND, THIRD, FOURTH, FIFTH };`
+manière moderne :
+`enum class value_place_request { first, any, last, second, third, fourth, fifth };`
+
+
 ## Operator overload
 
-## Headers (.h)
-
-dans header
-mettre template definition
-mettre functions inline 
-ifndef ...
-define ...
-include uniquement ce qui est utile ds le header
+## volatile/mutable
 
 
-## Heap/stack
+## [friend](https://en.cppreference.com/w/cpp/language/friend)
 
-## Classes
+The friend declaration appears in a class body
+and grants a function or another class access to private and protected members of the class where the friend declaration appears.
+
 
 ## Macros
-
-## STD
-
-vector: cf. [guide](https://code.probayes.net/probayes/devops/code-community-kb/-/wikis/guide/cpp/astuces/std::vector)
 
 ## Misc
 TODO put this in the right places
   - avoid use of auto
-  - new => crée un raw ptr
+  - new => crée un raw ptr en heap
   - jamais passer en arg des ptrs, utiliser via reference ou const ref; par contre en renvoyer c'est possible
   - mettre des const de partout
   - creer des obj sur la stack si possible. new crée sur la heap, donc éviter au max
 TODO stack >> heap. faire des vecteurs d'objet, + rapide car prefetching. jamais de tri sur un vecteur d'obj. vecteur de ref de pointers dans ce cas, les ref de ptrs sont move. demander à Jordi notation constructeur pour limiter nb move et copy 
     // for (std::size_t i; i<10; i++) // utiliser size_t et non int pr iterer par index. /!\ index - 1 à 0 fait un modulo
     // rester en 32 pour faire des op sur les entiers, si en 16 le cpu peut pas et les implicit cast en 32
-    // uint_64_t i{42ULL}
+    // auto i{42ULL}
 
 ## [Noobie things](https://www.youtube.com/watch?v=i_wDa2AS_8w&ab_channel=mCoding)
 
 - using namespace std
+- std::endl instead of '\n' in for loops
 - using c style array over std array
 - using reinterpret_cast and C style cast
 - using const_cast

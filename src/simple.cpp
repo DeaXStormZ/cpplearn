@@ -9,10 +9,10 @@
 // SFINAE
 
 template<class T> // meta fonction type -> type
-using ref_type = std::reference_wrapper<const T>;
+using cref_type = std::reference_wrapper<const T>;
 
 template<class C> // meta fonction type -> type
-using ref_vector = std::vector<ref_type<typename C::value_type>>;
+using ref_vector = std::vector<cref_type<typename C::value_type>>;
 
 // does C have a size ?
 template <class C, class = void>
@@ -33,7 +33,17 @@ static_assert(sizeable_v<std::vector<int>>);
 static_assert(sizeable_v<std::list<int>>);
 static_assert(not sizeable_v<std::forward_list<int>>);
 
-// inline evite les declarations multiples si plusieurs TU
+// inline évite les declarations multiples si plusieurs TU
+
+struct X {
+    int a;
+    char c;
+    int b;
+}; // faire gaffe à l'ordre des membres, il peut y avoir du padding
+
+// packing
+
+constexpr int a{sizeof(X)}; // ctrl + q sur la variable donne la value
 
 template<class C>
 ref_vector<C> make_reference_vector(const C &elements) {
@@ -54,8 +64,7 @@ ref_vector<C> omni_sort(const C &c) {
     return rv;
 }
 
-using X = std::vector<int>::value_type; // X = int
-using Y = std::list<float>::value_type;
+using Y = std::vector<int>::value_type; // X = int
 
 
 template<class C>
