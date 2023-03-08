@@ -1,4 +1,4 @@
-# TODO
+# Miscellaneous
 
 ## [Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines)
 
@@ -13,15 +13,13 @@
 
 ## Scope
 
-## copy elision
-
 ## auto
 
 ## enum
  
-manière 98 :
+98, issue is that enum is global :
 `enum value_place_request { FIRST, ANY, LAST, SECOND, THIRD, FOURTH, FIFTH };`
-manière moderne :
+modern cpp :
 `enum class value_place_request { first, any, last, second, third, fourth, fifth };`
 
 
@@ -91,3 +89,11 @@ TODO stack >> heap. faire des vecteurs d'objet, + rapide car prefetching. jamais
 - using shared_ptr when unique_ptr would do
 - thinking shared_ptr is thread safe. only the reference counting is thread safe
 - ! const applies to the thing at its left, of at its right if nothing at left 
+
+# Misc
+
+trivially copiable, pas passer par const ref !. pbk qd > 3*64bi
+
+std::function, utile uniquement pour du type erasure (utilisé avec des templates, vu que le type templaté est très contaminant)
+
+thin template. éviter binary bloat
